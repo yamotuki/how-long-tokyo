@@ -17,8 +17,8 @@
       "**/node_modules/**"
     ],
     "rewrites": [ {
-       "source": "/helloWorld",
-       "function": "helloWorld"
+       "source": "/top",
+       "function": "topPage"
     } ]
   }
 }
