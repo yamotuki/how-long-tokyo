@@ -13,12 +13,14 @@ export const topPage = functions.https.onRequest(async (request, response) => {
 
     const docRef = db.collection('routes').doc('testDocumentPath');
 
-    await docRef.set({
-        first: 'Ada',
-        last: 'Lovelace',
-        born: 1815
-    });
+    //  await docRef.set({
+    //      first: 'Ada',
+    //      last: 'Lovelace',
+    //      born: 1815
+    //  });
 
-    functions.logger.info("Hello logs!", {structuredData: true});
-    response.send("HHello from Firebase!");
+    const resData = await docRef.get();
+
+    // functions.logger.info("Hello logs!", {structuredData: true});
+    response.send(resData.get('first') + ' ' + resData.get('last'));
 });
