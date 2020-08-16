@@ -11,7 +11,7 @@ export const topPage = functions.https.onRequest(async (request, response) => {
 
     const db = admin.firestore();
 
-    const docRef = db.collection('routes').doc('testDocumentPath');
+    const docRef = db.collection('routes').doc('3yloNs7ywdkKAx3r2yIl');
 
     //  await docRef.set({
     //      first: 'Ada',
@@ -22,5 +22,5 @@ export const topPage = functions.https.onRequest(async (request, response) => {
     const resData = await docRef.get();
 
     // functions.logger.info("Hello logs!", {structuredData: true});
-    response.send(resData.get('first') + ' ' + resData.get('last'));
+    response.send(resData.get('route'));
 });
