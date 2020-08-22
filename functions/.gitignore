@@ -2,7 +2,12 @@
 **/*.js
 **/*.js.map
 
+../.idea/
+firebase-debug.log
+
 # Typescript v1 declaration files
 typings/
 
 node_modules/
+
+.runtimeconfig.json
