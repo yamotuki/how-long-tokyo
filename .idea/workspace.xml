@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ffeeb4f-7e8a-48b5-8bc1-3a13613cc8a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/firebase.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/functions/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/firebase-debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/functions/firebase-debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/functions/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/functions/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/functions/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +24,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1fzqu56CI3TgtuRHWyGAOyN4cBO" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -49,6 +51,7 @@
       <option name="presentableId" value="Default" />
       <updated>1597231487565</updated>
       <workItem from="1597231489251" duration="2105000" />
+      <workItem from="1598115841002" duration="2479000" />
     </task>
     <servers />
   </component>
@@ -60,10 +63,10 @@
       <screen x="0" y="0" width="1600" height="900" />
     </state>
     <state x="309" y="89" key="SettingsEditor/0.0.1600.900@0.0.1600.900" timestamp="1597231502831" />
-    <state x="465" y="206" key="run.anything.popup" timestamp="1597555191823">
+    <state x="465" y="202" key="run.anything.popup" timestamp="1598174879097">
       <screen x="0" y="23" width="1600" height="814" />
     </state>
-    <state x="465" y="206" key="run.anything.popup/0.23.1600.814@0.23.1600.814" timestamp="1597555191823" />
+    <state x="465" y="202" key="run.anything.popup/0.23.1600.814@0.23.1600.814" timestamp="1598174879097" />
     <state x="465" y="210" key="run.anything.popup/0.23.1600.816@0.23.1600.816" timestamp="1597306588298" />
     <state x="465" y="196" key="search.everywhere.popup" timestamp="1597231522211">
       <screen x="0" y="0" width="1600" height="900" />

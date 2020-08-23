@@ -34,17 +34,22 @@ export const checkTimesTrigger = functions.https.onRequest(async (request, respo
     // firebase functions:config:get
     // local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
 
-    // billing
-    // https://developers.google.com/maps/documentation/distance-matrix/usage-and-billing?hl=ja
-
-    // restriction
+    // TODO: restriction
     // 使い始めたらAPI接続元や回数の制限を入れる。不正利用防止の目的
 
-    const apiKey = functions.config()['how-long-tokyo'].key;
-//    console.log(apiKey);
-//    console.log(functions.config()["how-long-tokyo"]);
+    // TODO: departure time とか設定できるようなので、朝の時間帯と夜の時間帯みたいな選択肢で機能拡張もできそう
+    // TODO: 乗り換え回数を少なくする、とかGoogleMapで使える機能はだいたい使える。　transit_routing_preference とか。
 
-    const matrixApi = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=Seattle&destinations=San+Francisco&key=' + apiKey;
+    const apiKey = functions.config()['how-long-tokyo'].key;
+
+    const destinations = ['新宿駅', '東京駅', '渋谷駅', '池袋駅', '上野駅', '新橋駅', '日暮里駅', '飯田橋駅', '品川駅', '四ツ谷駅', '市ヶ谷駅', '北千住駅', '秋葉原駅', '御徒町駅', '神田駅', '大手町駅', '永田町駅', '代々木駅', '御茶ノ水駅', '荻窪駅', '赤羽駅'];
+    const destinationsString = destinations.join('|');
+
+    // TODO: 直近の月曜日の日付で検索がデフォルトにする。とりあえず 2020/08/24（月）にしておく
+    // departure_time=2020-08-24T08:30:00  一旦これ入れたら 400 になったので改めてあとで確認
+
+    // mode = transit にしたら多くの経路が出なくなってしまった。driveを消しつつ公共交通機関優先で出せないか？ 
+    const matrixApi = encodeURI('https://maps.googleapis.com/maps/api/distancematrix/json?language=ja&region=jp&mode=transit&transit_mode=rail&origins=落合駅&destinations=' + destinationsString + '&key=' + apiKey);
 
     console.log(matrixApi);
 
