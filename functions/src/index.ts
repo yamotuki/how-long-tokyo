@@ -27,6 +27,61 @@ export const topPage = functions.https.onRequest(async (request, response) => {
 });
 
 
+// Navitime の reachable api のレンジを伸ばして使ったケースのテスト
+// https://api.rakuten.net/navitimejapan-navitimejapan/api/navitime-reachable/endpoints
+export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async (request, response) => {
+
+    // required authentication （get api key）
+    // https://developers.google.com/maps/documentation/distance-matrix/get-api-key?hl=ja
+    // FYI: キーの環境変数への設定
+    // firebase functions:config:set how-long-tokyo.key=dummykeystring
+    // firebase functions:config:get
+    // local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
+
+
+    admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+    });
+
+    var unirest = require("unirest");
+
+    var req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
+
+    req.query({
+        "term_from": "0",
+        "offset": "0",
+        "limit": "5",
+        "transit_limit": "0",
+        "coord_unit": "degree",
+        "datum": "wgs84",
+        "walk_speed": "5",
+        "start": "35.7105656,139.6856175",
+        "term": "120"
+    });
+
+    const apiKey = functions.config()['how-long-tokyo'].navitime_key;
+
+    // TODO: APIは叩けている！！！！　 レスポンスに結果返せていないので調整
+
+    req.headers({
+        "x-rapidapi-host": "navitime-reachable.p.rapidapi.com",
+        "x-rapidapi-key": apiKey,
+        "useQueryString": true
+    });
+
+
+    const body = await req.end(function (res: any) {
+        if (res.error) throw new Error(res.error);
+
+        console.log(res.body);
+
+        return res.body;
+    });
+
+    response.send(body)
+});
+
+
 // どうも directions APIの方もmatrix distance 同様にそもそも東京周りのルートをちゃんとAPIとして提供していないようなので断念
 export const checkFromDirectionsTrigger = functions.https.onRequest(async (request, response) => {
     const apiKey = functions.config()['how-long-tokyo'].key;
@@ -43,12 +98,6 @@ export const checkFromDirectionsTrigger = functions.https.onRequest(async (reque
 });
 // こちらは matrix distance 使った試し。公共交通使った乗り換えがダメだったので断念。
 export const checkMatrixTimesTrigger = functions.https.onRequest(async (request, response) => {
-    // required authentication （get api key）
-    // https://developers.google.com/maps/documentation/distance-matrix/get-api-key?hl=ja
-    // FYI: キーの環境変数への設定
-    // firebase functions:config:set how-long-tokyo.key=dummykeystring
-    // firebase functions:config:get
-    // local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
 
     // TODO: restriction
     // 使い始めたらAPI接続元や回数の制限を入れる。不正利用防止の目的
