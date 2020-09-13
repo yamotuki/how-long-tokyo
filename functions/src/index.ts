@@ -26,7 +26,23 @@ export const topPage = functions.https.onRequest(async (request, response) => {
     response.send(resData.get('route'));
 });
 
-export const checkTimesTrigger = functions.https.onRequest(async (request, response) => {
+
+// どうも directions APIの方もmatrix distance 同様にそもそも東京周りのルートをちゃんとAPIとして提供していないようなので断念
+export const checkFromDirectionsTrigger = functions.https.onRequest(async (request, response) => {
+    const apiKey = functions.config()['how-long-tokyo'].key;
+
+    const directionsApi = encodeURI('https://maps.googleapis.com/maps/api/directions/json?language=ja&region=jp&mode=transit&origin=東京都中野区東中野4丁目29&destination=東京都北区赤羽1丁目1&key=' + apiKey);
+
+    console.log(directionsApi);
+
+    const result = await axios.get(directionsApi);
+
+    response.send(result.data)
+
+
+});
+// こちらは matrix distance 使った試し。公共交通使った乗り換えがダメだったので断念。
+export const checkMatrixTimesTrigger = functions.https.onRequest(async (request, response) => {
     // required authentication （get api key）
     // https://developers.google.com/maps/documentation/distance-matrix/get-api-key?hl=ja
     // FYI: キーの環境変数への設定
@@ -48,7 +64,7 @@ export const checkTimesTrigger = functions.https.onRequest(async (request, respo
     // TODO: 直近の月曜日の日付で検索がデフォルトにする。とりあえず 2020/08/24（月）にしておく
     // departure_time=2020-08-24T08:30:00  一旦これ入れたら 400 になったので改めてあとで確認
 
-    // mode = transit にしたら多くの経路が出なくなってしまった。driveを消しつつ公共交通機関優先で出せないか？ 
+    // mode = transit にしたら多くの経路が出なくなってしまった。driveを消しつつ公共交通機関優先で出せないか？
     const matrixApi = encodeURI('https://maps.googleapis.com/maps/api/distancematrix/json?language=ja&region=jp&mode=transit&transit_mode=rail&origins=落合駅&destinations=' + destinationsString + '&key=' + apiKey);
 
     console.log(matrixApi);
