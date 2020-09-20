@@ -70,15 +70,16 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
     });
 
 
-    const body = await req.end(function (res: any) {
+    await req.end(function (res: any) {
         if (res.error) throw new Error(res.error);
 
-        console.log(res.body);
+        const body = res.body;
 
-        return res.body;
+        console.log(body);
+
+        response.send(body)
     });
 
-    response.send(body)
 });
 
 
