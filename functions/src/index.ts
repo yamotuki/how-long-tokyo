@@ -42,9 +42,9 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
         credential: admin.credential.applicationDefault(),
     });
 
-    var unirest = require("unirest");
+    const unirest = require("unirest");
 
-    var req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
+    const req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
 
     req.query({
         "term_from": "2" /* 最短時間設定。0だと駅近から検索するとその駅もマッチしてしまうので排除 */,
@@ -80,6 +80,17 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
 
 });
 
+export const showCoordTrigger = functions.https.onRequest(async (request, response) => {
+    admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+    });
+    const db = admin.firestore();
+    const docRef = db.collection('coord').doc('point');
+
+    const resData = await docRef.get();
+
+    response.send(resData.get('00009061'));
+});
 
 // 駅の座標情報のimport
 export const importCoordTrigger = functions.https.onRequest(async (request, response) => {
@@ -102,25 +113,29 @@ export const importCoordData = async (response: any) => {
     const db = admin.firestore();
     const docRef = db.collection('coord').doc('point');
 
-    db.runTransaction(async (t) => {
-        /* TODO !!!!! 500件が1リクエストの限界だそうなので直す */
-        for (const node of tempOutput.items) {
-            t.set(docRef, {
-                    [node.node_id]: {
-                        name: node.name,
-                        coord: new admin.firestore.GeoPoint(
-                            node.coord.lat,
-                            node.coord.lon
-                        )
-                    }
-                }
-                , {merge: true}
-            );
+    let index = 0;
+    let batch = db.batch();
+    for (const node of tempOutput.items) {
+        if (index > 0 && (index) % 500 === 0) {
+            await batch.commit();
+            batch = db.batch();
         }
-    }).catch((err) => {
-        console.log('Transaction failure:', err);
-        response.send('not good');
-    });
+        index++;
+
+        batch.set(docRef, {
+                [node.node_id]: {
+                    name: node.name,
+                    coord: new admin.firestore.GeoPoint(
+                        node.coord.lat,
+                        node.coord.lon
+                    )
+                }
+            }
+            , {merge: true}
+        );
+    }
+
+    await batch.commit();
 
     response.send('ok');
 };
