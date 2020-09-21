@@ -89,7 +89,7 @@ export const showCoordTrigger = functions.https.onRequest(async (request, respon
 
     const resData = await docRef.get();
 
-    response.send(resData.get('00009061'));
+    response.send(resData.get('新宿'));
 });
 
 // 駅の座標情報のimport
@@ -113,6 +113,8 @@ export const importCoordData = async (response: any) => {
     const db = admin.firestore();
     const docRef = db.collection('coord').doc('point');
 
+    await docRef.set({});
+
     let index = 0;
     let batch = db.batch();
     for (const node of tempOutput.items) {
@@ -123,8 +125,8 @@ export const importCoordData = async (response: any) => {
         index++;
 
         batch.set(docRef, {
-                [node.node_id]: {
-                    name: node.name,
+                [node.name]: {
+                    id: node.node_id,
                     coord: new admin.firestore.GeoPoint(
                         node.coord.lat,
                         node.coord.lon
