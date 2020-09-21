@@ -81,8 +81,8 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
 });
 
 // TODO: 特定の駅をクリック（入力）すると他の駅への距離が分かる。作成ステップ
-// 1. 駅名からcoordを取得（show coord で作成済み） => 入力を外部から渡せるようにする  <= 今ここ
-// 2. cooord を初期点として reachable api 叩いて、そのうちの特定の駅リストを抽出する。特定の駅はコードにベタがき。
+// 1. 駅名からcoordを取得（show coord で作成済み） => 入力を外部から渡せるようにする
+// 2. cooord を初期点として reachable api 叩いて、そのうちの特定の駅リストを抽出する。特定の駅はコードにベタがき。 <= 今これをやっている
 // 3. 上記結果はfirestoreにキャッシュしておき、あればそちらから取得する
 
 
@@ -103,7 +103,41 @@ export const showCoordTrigger = functions.https.onRequest(async (request, respon
 
     const resData = await docRef.get();
 
-    response.send(resData.get(inputForStart));
+    const startCoord = resData.get(inputForStart).coord;
+
+    const unirest = require("unirest");
+    const req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
+
+    req.query({
+        "term_from": "2" /* 最短時間設定。0だと駅近から検索するとその駅もマッチしてしまうので排除 */,
+        "offset": "0",
+        "options": "node_detail" /* ノード詳細表示？ */,
+        // TODO: 一時的な試し！！！！！！！！！！
+        // TODO: これを値を大きくして、必要な駅名で結果を抽出する
+        "limit": "5" /* 表示件数。max2000 */,
+        "transit_limit": "5" /* 乗り換え関数上限 */,
+        "coord_unit": "degree",
+        "datum": "wgs84",
+        "walk_speed": "4" /* 歩く速度km/h。デフォルト5だが4にしている*/,
+        "start": startCoord._latitude + ',' + startCoord._longitude /* 出発地 */,
+        "term": "120" /* 2時間で行ける距離。最大3時間 */
+    });
+    const apiKey = functions.config()['how-long-tokyo'].navitime_key;
+    req.headers({
+        "x-rapidapi-host": "navitime-reachable.p.rapidapi.com",
+        "x-rapidapi-key": apiKey,
+        "useQueryString": true
+    });
+
+    await req.end((res: any) => {
+        if (res.error) throw new Error(res.error);
+
+        const body = res.body;
+
+        console.log(body);
+
+        response.send(body)
+    });
 });
 
 // 駅の座標情報のimport
