@@ -48,15 +48,16 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
     var req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
 
     req.query({
-        "term_from": "0",
+        "term_from": "2" /* 最短時間設定。0だと駅近から検索するとその駅もマッチしてしまうので排除 */,
         "offset": "0",
-        "limit": "5",
-        "transit_limit": "0",
+        "options": "node_detail" /* ノード詳細表示？ */,
+        "limit": "1000" /* 表示件数。max2000 */,
+        "transit_limit": "5" /* 乗り換え関数上限 */,
         "coord_unit": "degree",
         "datum": "wgs84",
-        "walk_speed": "5",
-        "start": "35.7105656,139.6856175",
-        "term": "120"
+        "walk_speed": "4" /* 歩く速度km/h。デフォルト5だが4にしている*/,
+        "start": "35.710729,139.686058" /* 出発地 */,
+        "term": "120" /* 2時間で行ける距離。最大3時間 */
     });
 
     const apiKey = functions.config()['how-long-tokyo'].navitime_key;
@@ -68,7 +69,7 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
     });
 
 
-    await req.end(function (res: any) {
+    await req.end((res: any) => {
         if (res.error) throw new Error(res.error);
 
         const body = res.body;
