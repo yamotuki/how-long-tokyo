@@ -80,16 +80,30 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
 
 });
 
+// TODO: 特定の駅をクリック（入力）すると他の駅への距離が分かる。作成ステップ
+// 1. 駅名からcoordを取得（show coord で作成済み） => 入力を外部から渡せるようにする  <= 今ここ
+// 2. cooord を初期点として reachable api 叩いて、そのうちの特定の駅リストを抽出する。特定の駅はコードにベタがき。
+// 3. 上記結果はfirestoreにキャッシュしておき、あればそちらから取得する
+
+
 export const showCoordTrigger = functions.https.onRequest(async (request, response) => {
-    admin.initializeApp({
-        credential: admin.credential.applicationDefault(),
-    });
+    const inputForStart = request.query.start as String;
+    if (!inputForStart) {
+        throw new Error('開始駅の名前が必要です');
+    }
+
+    if (!admin.apps.length) {
+        admin.initializeApp({
+            credential: admin.credential.applicationDefault(),
+        });
+    }
+
     const db = admin.firestore();
     const docRef = db.collection('coord').doc('point');
 
     const resData = await docRef.get();
 
-    response.send(resData.get('新宿'));
+    response.send(resData.get(inputForStart));
 });
 
 // 駅の座標情報のimport
