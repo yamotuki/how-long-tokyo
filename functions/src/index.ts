@@ -86,7 +86,7 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
 // 3. 上記結果はfirestoreにキャッシュしておき、あればそちらから取得する
 
 
-export const showCoordTrigger = functions.https.onRequest(async (request, response) => {
+export const showReachableTrigger = functions.https.onRequest(async (request, response) => {
     const inputForStart = request.query.start as String;
     if (!inputForStart) {
         throw new Error('開始駅の名前が必要です');
@@ -103,7 +103,11 @@ export const showCoordTrigger = functions.https.onRequest(async (request, respon
 
     const resData = await docRef.get();
 
-    const startCoord = resData.get(inputForStart).coord;
+    const startCoord = resData.get(inputForStart) ? resData.get(inputForStart).coord : null;
+
+    if (!startCoord) {
+        throw new Error('開始駅の名前が正しくありません');
+    }
 
     const unirest = require("unirest");
     const req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
