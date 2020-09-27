@@ -80,11 +80,6 @@ export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async
 
 });
 
-// TODO: 特定の駅をクリック（入力）すると他の駅への距離が分かる。作成ステップ
-// 1. 駅名からcoordを取得（show coord で作成済み） => 入力を外部から渡せるようにする
-// 2. cooord を初期点として reachable api 叩いて、そのうちの特定の駅リストを抽出する。特定の駅はコードにベタがき。 <= 今これをやっている
-// 3. 上記結果はfirestoreにキャッシュしておき、あればそちらから取得する
-
 
 export const showReachableTrigger = functions.https.onRequest(async (request, response) => {
     const inputForStart = request.query.start as string;
@@ -111,6 +106,10 @@ export const showReachableTrigger = functions.https.onRequest(async (request, re
     // すでに取得したことがあれば firestore から取得
     // TODO: 結果をCDNなど通してキャッシュする。firestoreから取るより安いし早いはず
     const timeToArriveDoc = db.collection('timeToArrive').doc('station');
+    // TODO temp !!!!!!!!!!!!!!!!
+    // timeToArriveDoc.set({})
+    // return
+
     const dataFromFirestore = await timeToArriveDoc.get();
     const resultFromFirestore = dataFromFirestore.get(inputForStart)
     if (resultFromFirestore) {
@@ -147,7 +146,7 @@ export const showReachableTrigger = functions.https.onRequest(async (request, re
 
         let index = 0;
         let batch = db.batch();
-        for (const item of items) {
+        for (const itemForStore of items) {
             if (index > 0 && (index) % 500 === 0) {
                 await batch.commit();
                 batch = db.batch();
@@ -155,26 +154,53 @@ export const showReachableTrigger = functions.https.onRequest(async (request, re
             index++;
 
             batch.set(timeToArriveDoc, {
-                    [inputForStart]: {
-                        [item.name]:
-                            {
-                                time: item.time,
-                                transit_count: item.transit_count
-                            }
-                    }
+                    [inputForStart]: arrangeTimeToArriveItem(itemForStore)
                 }
                 , {merge: true}
             );
         }
-
         await batch.commit();
 
-        // TODO こちらのパターンで、保存してからfirestoreから取得しようと思ったが、同期的に保存されていないのでだめ
-        // TODO このまま整形して返すようにする
-        response.send(items);
+        // もうちょっとスマートな変換ありそう。あとで考える。
+        const formattedArray = items.map((itemForResponse: reachableApiResponseItem) => {
+            return arrangeTimeToArriveItem(itemForResponse);
+        });
+        const formattedObject = formattedArray.reduce((result: any, current: any) => {
+            const key = Object.keys(current)[0];
+            result[key] = current[key];
+            return result;
+        }, {});
+
+
+        console.log('response from reachable api response')
+        response.send(formattedObject);
         return
     });
 });
+
+type coordType = {
+    "lat": number,
+    "lon": number
+}
+
+interface reachableApiResponseItem {
+    "time": number,
+    "coord": coordType,
+    "name": string,
+    "node_id": string,
+    "transit_count": string
+}
+
+const arrangeTimeToArriveItem = (item: reachableApiResponseItem) => {
+    return {
+        [item.name]:
+            {
+                time: item.time,
+                transit_count: item.transit_count,
+                coord: item.coord
+            }
+    }
+}
 
 // 駅の座標情報のimport
 // export const importCoordTrigger = functions.https.onRequest(async (request, response) => {
