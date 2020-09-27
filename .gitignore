@@ -1,3 +1,5 @@
 .idea
 
 .runtimeconfig.json
+
+firebase-debug.log
