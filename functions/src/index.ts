@@ -1,86 +1,12 @@
 import * as functions from 'firebase-functions';
 import * as admin from "firebase-admin";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const topPage = functions.https.onRequest(async (request, response) => {
-    admin.initializeApp({
-        credential: admin.credential.applicationDefault(),
-    });
-
-    const db = admin.firestore();
-
-    const docRef = db.collection('routes').doc('originToDestination');
-
-    //  await docRef.set({
-    //      first: 'Ada',
-    //      last: 'Lovelace',
-    //      born: 1815
-    //  });
-
-    const resData = await docRef.get();
-
-    // functions.logger.info("Hello logs!", {structuredData: true});
-    response.send(resData.get('route'));
-});
-
-
-// Navitime の reachable api のレンジを伸ばして使ったケースのテスト
-// https://api.rakuten.net/navitimejapan-navitimejapan/api/navitime-reachable/endpoints
-export const checkFromNavitimeReachableTrigger = functions.https.onRequest(async (request, response) => {
-
-    // required authentication （get api key）
-    // https://developers.google.com/maps/documentation/distance-matrix/get-api-key?hl=ja
-    // FYI: キーの環境変数への設定
-    // firebase functions:config:set how-long-tokyo.key=dummykeystring
-    // firebase functions:config:get
-    // local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
-
-
-    admin.initializeApp({
-        credential: admin.credential.applicationDefault(),
-    });
-
-    const unirest = require("unirest");
-
-    const req = unirest("GET", "https://navitime-reachable.p.rapidapi.com/reachable_transit");
-
-    req.query({
-        "term_from": "2" /* 最短時間設定。0だと駅近から検索するとその駅もマッチしてしまうので排除 */,
-        "offset": "0",
-        "options": "node_detail" /* ノード詳細表示？ */,
-        "limit": "1000" /* 表示件数。max2000 */,
-        "transit_limit": "5" /* 乗り換え関数上限 */,
-        "coord_unit": "degree",
-        "datum": "wgs84",
-        "walk_speed": "4" /* 歩く速度km/h。デフォルト5だが4にしている*/,
-        "start": "35.710729,139.686058" /* 出発地 */,
-        "term": "120" /* 2時間で行ける距離。最大3時間 */
-    });
-
-    const apiKey = functions.config()['how-long-tokyo'].navitime_key;
-
-    req.headers({
-        "x-rapidapi-host": "navitime-reachable.p.rapidapi.com",
-        "x-rapidapi-key": apiKey,
-        "useQueryString": true
-    });
-
-
-    await req.end((res: any) => {
-        if (res.error) throw new Error(res.error);
-
-        const body = res.body;
-
-        console.log(body);
-
-        response.send(body)
-    });
-
-});
-
-
+// required authentication （get api key）
+// https://developers.google.com/maps/documentation/distance-matrix/get-api-key?hl=ja
+// FYI: キーの環境変数への設定
+// firebase functions:config:set how-long-tokyo.key=dummykeystring
+// firebase functions:config:get
+// local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
 export const showReachableTrigger = functions.https.onRequest(async (request, response) => {
     const inputForStart = request.query.start as string;
     if (!inputForStart) {
@@ -106,9 +32,6 @@ export const showReachableTrigger = functions.https.onRequest(async (request, re
     // すでに取得したことがあれば firestore から取得
     // TODO: 結果をCDNなど通してキャッシュする。firestoreから取るより安いし早いはず
     const timeToArriveDoc = db.collection('timeToArrive').doc('station');
-    // TODO temp !!!!!!!!!!!!!!!!
-    // timeToArriveDoc.set({})
-    // return
 
     const dataFromFirestore = await timeToArriveDoc.get();
     const resultFromFirestore = dataFromFirestore.get(inputForStart)
