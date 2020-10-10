@@ -150,7 +150,7 @@ const arrangeTimeToArriveItem = (item: reachableApiResponseItem) => {
 //     let index = 0;
 //     let batch = db.batch();
 //     このtempOutput は nodeList.ts に一時的に保管しました。
-//     for (const node of tempOutput.items) {
+//     for (const node of tempOutput.posts) {
 //         if (index > 0 && (index) % 500 === 0) {
 //             await batch.commit();
 //             batch = db.batch();
