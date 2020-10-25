@@ -6,9 +6,13 @@
                  alt="地図">
             <template v-for="stationName in Object.keys(station)">
                 <div :style="getStyle(station[stationName].coord.lat, station[stationName].coord.lon)">
-                    {{ stationName }}
-                    {{ station[stationName].coord.lat }}
-                    {{ station[stationName].coord.lon }}
+                    <div class="pointer-pin">
+                        p
+                    </div>
+                    <div class="pointer-label">
+                        {{ stationName }}
+                        {{ station[stationName].time }}
+                    </div>
                 </div>
             </template>
         </div>
@@ -26,8 +30,8 @@
       getStyle: function(lat, lon) {
         return {
           position: 'absolute',
-          top: (lat - 35.5) / 35.5 * 100 * 100 + '%',
-          left: (lon - 139) / 139 * 100 * 100 + '%',
+          bottom: (lat - 35.5) / 35.5 * 100 * 100 + '%',
+          right: (lon - 139) / 139 * 100 * 100 + '%',
         };
       },
     },
@@ -45,16 +49,16 @@
       // map をどこ基準にするか？　https://www.gsi.go.jp/KOKUJYOHO/CENTER/kendata/tokyo_heso.pdf
       // 経度 138 ~ 140 でとりあえず表示
       // 緯度 35 ~ 36 のなかで表示
-
-      // TODO この google map static api で適当な幅を指定して、そこにcssでオーバーレイするのは？
-      // https://developers.google.com/maps/documentation/maps-static/overview?hl=ja
-      // ピンにラベルがつけられそう
-      // marker は url につける形。URLの長さ制限は8000ほど。http://maps.googleapis.com/maps/api/staticmap?&size=600x400&style=visibility:on&markers=label:S%7C40.702147,-74.015794
-      // 上記の形式のようにすると200くらいはマーカー足せそうだけど、結構きつい。駅の数は1000。これじゃダメ。
+      // TODO sin にすれば百分率計算いい感じにできる　https://developers.google.com/maps/documentation/javascript/examples/map-coordinates
 
       // google map のスクショは、帰属をはっきりさせる部分を残せば使って良さそう。
-      // TODO storage に google_map_ss_01.jpg みたいな名前で保存したのでそれをダウンロードしてnuxtで表示する
 
     },
   };
 </script>
+
+<style>
+    .pointer-label {
+        font-size: 13px;
+    }
+</style>
