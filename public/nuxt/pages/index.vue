@@ -7,7 +7,7 @@
                  alt="地図">
             <template v-for="stationName in Object.keys(station)">
                 <div :style="getStyle(station[stationName].coord.lat, station[stationName].coord.lon)">
-                    <div class="pointer-label">
+                    <div class="pointer-label" v-on:click="setStart(stationName)">
                         <!-- TODO: マウスオーバーした時だけ駅名が見れるようにする -->
                         <!--{{ stationName }}-->
                         {{ station[stationName].time }}

@@ -19,6 +19,11 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
         });
     }
 
+    // response.send は2箇所あるので上の方であらかじめ設定しておく
+    // TODO allow origin はあとでnuxt側と合わせて環境変数で分岐する
+    response.set('Access-Control-Allow-Origin', '*');
+    response.set('Access-Control-Allow-Headers', 'Content-Type');
+
     const db = admin.firestore();
     const docRef = db.collection('coord').doc('point');
     const resData = await docRef.get();
