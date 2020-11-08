@@ -36,7 +36,7 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
 
     // すでに取得したことがあれば firestore から取得
     // TODO: 結果をCDNなど通してキャッシュする。firestoreから取るより安いし早いはず
-    const timeToArriveDoc = db.collection('timeToArrive').doc('station');
+    const timeToArriveDoc = db.collection('timeToArrive').doc('stations');
 
     const dataFromFirestore = await timeToArriveDoc.get();
     const resultFromFirestore = dataFromFirestore.get(inputForStart)
