@@ -7,8 +7,10 @@ import * as admin from "firebase-admin";
 // firebase functions:config:set how-long-tokyo.key=dummykeystring
 // firebase functions:config:get
 // local emulator から functions.config() では呼び出せないので firebase functions:config:get > .runtimeconfig.json として入れておく ref: https://stackoverflow.com/questions/54689871/set-firebase-local-emulator-cloud-function-environment-config-values
+// TODO: 結果をCDNなど通してキャッシュする。firestoreから取るより安いし早いはず
 export const showReachableTrigger = functions.region('asia-northeast1').https.onRequest(async (request, response) => {
     const inputForStart = request.query.start as string;
+    console.log(inputForStart)
     if (!inputForStart) {
         throw new Error('開始駅の名前が必要です');
     }
@@ -33,13 +35,11 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
     const startCoord = resData.get(inputForStart).coord;
     // const startNodeId = resData.get(inputForStart).id;
 
-
     // すでに取得したことがあれば firestore から取得
-    // TODO: 結果をCDNなど通してキャッシュする。firestoreから取るより安いし早いはず
-    const timeToArriveDoc = db.collection('timeToArrive').doc('stations');
+    const timeToArriveDoc = db.collection('timeToArrive').doc(inputForStart);
 
     const dataFromFirestore = await timeToArriveDoc.get();
-    const resultFromFirestore = dataFromFirestore.get(inputForStart)
+    const resultFromFirestore = dataFromFirestore.get(inputForStart);
     if (resultFromFirestore) {
         console.log('response with firestore data');
         response.send(resultFromFirestore);

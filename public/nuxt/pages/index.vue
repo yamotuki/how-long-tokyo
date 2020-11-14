@@ -1,9 +1,9 @@
 <template>
     <div>
         <h1>駅一覧</h1>
-        <div style="position: relative">
+        <div class="map-wrapper">
             <!--google map のスクショは、帰属をはっきりさせる部分を残せば使って良さそう。-->
-            <img src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
+            <img class="map-image" src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
                  alt="地図">
             <template v-for="stationName in Object.keys(stations)">
                 <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
@@ -40,6 +40,9 @@
         await this.fetchData(stationName);
       },
       fetchData: async function(stationName = '東京') {
+        console.log(stationName);
+        // TODO: 入力は正しそうだが、csr の時にAPI叩くと動いていない？ => hot reload の時に叩けているし clinet console に駅名出ている
+        //     TODO:  firestore の document size が超過した？
         // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
         const jsonRes = await fetch(
             'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
@@ -48,21 +51,9 @@
                 res.json(),
             );
 
-        console.log(jsonRes);
-
         // 直接 json parse できなかったので一度 string にしている
         this.stations = JSON.parse(JSON.stringify(jsonRes));
         await this.$forceUpdate();
-
-        console.log(this.stations['宿河原'])
-
-        // vue が認識できるように入れ直す
-/*        this.stations = [];
-        // TODO: これだと name が key の object だったものが配列になってしまっているので直す！！！！！
-        Object.keys(stationObjects).forEach((itemName) => {
-          this.stations.push({[itemName]: stationObjects[itemName]})
-        })*/
-       //  console.log(this.stations)
       }
     },
     async fetch() {
@@ -72,7 +63,16 @@
 </script>
 
 <style>
+    .map-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
     .pointer-label {
         font-size: 13px;
+    }
+
+    .map-image {
+        width: 100%;
     }
 </style>
