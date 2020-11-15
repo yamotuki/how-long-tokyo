@@ -3,13 +3,19 @@
         <h1>駅一覧</h1>
         <div class="map-wrapper">
             <!--google map のスクショは、帰属をはっきりさせる部分を残せば使って良さそう。-->
-            <img class="map-image" src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
+            <img class="map-image"
+                 src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
                  alt="地図">
             <template v-for="stationName in Object.keys(stations)">
                 <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
                     <div class="pointer-label" v-on:click="setStart(stationName)">
                         <!-- TODO: マウスオーバーした時だけ駅名が見れるようにする -->
-                        {{ stations[stationName].time }}
+                        <span v-if="stations[stationName].time === 0">
+                            {{ stationName }}
+                        </span>
+                        <span v-if="stations[stationName].time > 1">
+                            {{ stations[stationName].time }}
+                        </span>
                     </div>
                 </div>
             </template>
