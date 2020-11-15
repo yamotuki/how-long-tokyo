@@ -3,6 +3,8 @@
         <h1>駅一覧</h1>
         <div class="map-wrapper">
             <!--google map のスクショは、帰属をはっきりさせる部分を残せば使って良さそう。-->
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+                  rel="stylesheet">
             <img class="map-image"
                  src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
                  alt="地図">
@@ -10,8 +12,11 @@
                 <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
                     <div class="pointer-label" v-on:click="setStart(stationName)">
                         <!-- TODO: マウスオーバーした時だけ駅名が見れるようにする -->
-                        <span v-if="stations[stationName].time === 0">
-                            {{ stationName }}
+                        <span class="start-point" v-if="stations[stationName].time === 0">
+                            <i class="material-icons">location_on</i>
+                            <span class="start-point-name">
+                                {{ stationName }}
+                            </span>
                         </span>
                         <span v-if="stations[stationName].time > 1">
                             {{ stations[stationName].time }}
@@ -66,7 +71,7 @@
   };
 </script>
 
-<style>
+<style lang="scss">
     .map-wrapper {
         position: relative;
         overflow: hidden;
@@ -78,5 +83,15 @@
 
     .map-image {
         width: 100%;
+    }
+
+    .start-point {
+        color: red;
+
+        .start-point-name {
+            font-size: 18px;
+            font-weight: bold;
+            vertical-align: super;
+        }
     }
 </style>
