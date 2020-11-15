@@ -41,8 +41,6 @@
       },
       fetchData: async function(stationName = '東京') {
         console.log(stationName);
-        // TODO: 入力は正しそうだが、csr の時にAPI叩くと動いていない？ => hot reload の時に叩けているし clinet console に駅名出ている
-        //     TODO:  firestore の document size が超過した？
         // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
         const jsonRes = await fetch(
             'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +

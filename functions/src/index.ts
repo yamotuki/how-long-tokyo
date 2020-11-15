@@ -21,7 +21,7 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
         });
     }
 
-    // response.send は2箇所あるので上の方であらかじめ設定しておく
+    // response.send は2箇所あるのであらかじめ設定しておく
     // TODO allow origin はあとでnuxt側と合わせて環境変数で分岐する
     response.set('Access-Control-Allow-Origin', '*');
     response.set('Access-Control-Allow-Headers', 'Content-Type');
@@ -33,6 +33,7 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
         throw new Error('開始駅の名前が正しくありません');
     }
     const startCoord = resData.get(inputForStart).coord;
+    console.log(startCoord);
     // const startNodeId = resData.get(inputForStart).id;
 
     // すでに取得したことがあれば firestore から取得
@@ -42,6 +43,14 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
     const resultFromFirestore = dataFromFirestore.get(inputForStart);
     if (resultFromFirestore) {
         console.log('response with firestore data');
+        resultFromFirestore[inputForStart] = {
+            "transit_count": 0,
+            "coord": {
+                "lat": startCoord._latitude,
+                "lon": startCoord._longitude
+            },
+            "time": 0
+        };
         response.send(resultFromFirestore);
         return
     }
@@ -101,6 +110,14 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
 
 
         console.log('response from reachable api response')
+        formattedObject[inputForStart] = {
+            "transit_count": 0,
+            "coord": {
+                "lat": startCoord._latitude,
+                "lon": startCoord._longitude
+            },
+            "time": 0
+        };
         response.send(formattedObject);
         return
     });
