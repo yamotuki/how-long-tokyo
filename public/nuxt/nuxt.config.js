@@ -6,4 +6,7 @@ module.exports = {
     color: 'blue',
     height: '3px',
   },
+  build: {
+    loadingScreen: false
+  }
 };

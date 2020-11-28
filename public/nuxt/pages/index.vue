@@ -54,7 +54,7 @@
         };
       },
       setStart: async function(stationName) {
-        this.$nuxt.$loading.start({});
+        this.$nuxt.$loading.start();
         await this.fetchData(stationName);
         this.$nuxt.$loading.finish()
       },
