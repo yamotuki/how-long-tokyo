@@ -54,7 +54,9 @@
         };
       },
       setStart: async function(stationName) {
+        this.$nuxt.$loading.start({});
         await this.fetchData(stationName);
+        this.$nuxt.$loading.finish()
       },
       fetchData: async function(stationName = '東京') {
         // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
