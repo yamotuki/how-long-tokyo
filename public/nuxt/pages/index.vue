@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>駅一覧</h1>
-        <div class="map-wrapper">
+        <div class="map-wrapper" v-dragscroll>
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
                   rel="stylesheet">
@@ -57,7 +57,6 @@
         await this.fetchData(stationName);
       },
       fetchData: async function(stationName = '東京') {
-        console.log(stationName);
         // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
         const jsonRes = await fetch(
             'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
@@ -124,5 +123,19 @@
             opacity: 0.7;
             border-radius: 30%;
         }
+    }
+
+    // vue-dragscroll
+    .grab-bing {
+        cursor : -webkit-grab;
+        cursor : -moz-grab;
+        cursor : -o-grab;
+        cursor : grab;
+    }
+    .grab-bing:active {
+        cursor : -webkit-grabbing;
+        cursor : -moz-grabbing;
+        cursor : -o-grabbing;
+        cursor : grabbing;
     }
 </style>

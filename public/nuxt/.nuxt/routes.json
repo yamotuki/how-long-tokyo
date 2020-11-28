@@ -3,7 +3,6 @@
     "name": "index",
     "path": "/",
     "component": "/Users/tomoya_suzuki/develop/nodejs/firebase/public/nuxt/pages/index.vue",
-    "chunkName": "pages/index",
-    "_name": "_472cb9c9"
+    "chunkName": "pages/index"
   }
 ]
