@@ -81,6 +81,7 @@
     .map-wrapper {
         position: relative;
         overflow: hidden;
+        width: 1500px;
     }
 
     .pointer-label {
@@ -112,12 +113,16 @@
 
         .time {
             cursor: pointer;
+            color: #595959;
         }
 
         &:hover > .name, &:hover > .time {
             display: block;
             font-size: 18px;
             color: blue;
+            background-color: white;
+            opacity: 0.7;
+            border-radius: 30%;
         }
     }
 </style>
