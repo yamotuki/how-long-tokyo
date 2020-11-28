@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>駅一覧</h1>
+        <h1>駅をクリックすると他の駅までの時間が分かります</h1>
         <div class="map-wrapper" v-dragscroll>
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -123,19 +123,5 @@
             opacity: 0.7;
             border-radius: 30%;
         }
-    }
-
-    // vue-dragscroll
-    .grab-bing {
-        cursor : -webkit-grab;
-        cursor : -moz-grab;
-        cursor : -o-grab;
-        cursor : grab;
-    }
-    .grab-bing:active {
-        cursor : -webkit-grabbing;
-        cursor : -moz-grabbing;
-        cursor : -o-grabbing;
-        cursor : grabbing;
     }
 </style>
