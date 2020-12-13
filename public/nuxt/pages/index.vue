@@ -8,9 +8,11 @@
             <!--google map のスクショは、帰属をはっきりさせる部分を残せば使って良さそう。-->
             <img class="map-image"
                  src="https://firebasestorage.googleapis.com/v0/b/how-long-tokyo.appspot.com/o/google_map_ss_01.jpg?alt=media&token=2ce22939-01ca-413c-b824-d64609ec0b4f"
-                 alt="地図">
+                 alt="地図"
+            >
             <template v-for="stationName in Object.keys(stations)">
-                <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
+                <div v-if="!shouldNotShow(stations[stationName].coord.lat, stations[stationName].coord.lon)"
+                     :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
                     <div class="pointer-label" v-on:click="setStart(stationName)">
                         <!-- 開始点 -->
                         <span class="start-point" v-if="stations[stationName].time === 0">
@@ -44,13 +46,33 @@
       };
     },
     methods: {
-      getStyle: function(lat, lon) {
+      // TODO: 余分なものが外にはみ出すことはなくなったが、スクロールができなくなった
+      _getPosition: function(lat, lon) {
+        // map 右上 35.789124, 139.964959
+        // map 左下 35.561099, 139.552459
         return {
-          // map 右上 35.789124, 139.964959
-          // map 左下 35.561099, 139.552459
+          bottom: (lat - 35.561099) / (35.789124 - 35.561099) * 100,
+          left: (lon - 139.552459) / (139.964959 - 139.552459) * 100
+        }
+      },
+      shouldNotShow: function(lat, lon) {
+        const position = this._getPosition(lat, lon);
+        const bottom = position.bottom;
+        const left = position.left;
+
+        return bottom < 0 || 100 < bottom ||
+            left < 0 || 100 < left;
+      }
+      ,
+      getStyle: function(lat, lon) {
+        const position = this._getPosition(lat, lon);
+        const bottom = position.bottom;
+        const left = position.left;
+
+        return {
           position: 'absolute',
-          bottom: (lat - 35.561099) / (35.789124 - 35.561099) * 100 + '%',
-          left: (lon - 139.552459) / (139.964959 - 139.552459) * 100 + '%',
+          bottom: bottom + '%',
+          left: left + '%',
         };
       },
       setStart: async function(stationName) {
@@ -74,7 +96,7 @@
     },
     async fetch() {
       await this.fetchData()
-    },
+    }
   };
 </script>
 
