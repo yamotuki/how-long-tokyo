@@ -1,7 +1,9 @@
 <template>
     <div>
         <h1>駅をクリックすると他の駅までの時間が分かります</h1>
-        <div class="map-wrapper" v-dragscroll>
+        <!-- TODO: drag scroll 動いていないのでとりあえず諦め-->
+        <!-- TODO: SPだと小さすぎ & スクロールできない。まずは view port から-->
+        <div v-dragscroll class="map-wrapper">
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
                   rel="stylesheet">
@@ -46,7 +48,6 @@
       };
     },
     methods: {
-      // TODO: 余分なものが外にはみ出すことはなくなったが、スクロールができなくなった
       _getPosition: function(lat, lon) {
         // map 右上 35.789124, 139.964959
         // map 左下 35.561099, 139.552459
@@ -83,7 +84,8 @@
       fetchData: async function(stationName = '東京') {
         // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
         const jsonRes = await fetch(
-            'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
+//            'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
+            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
             encodeURIComponent(stationName)).
             then(res =>
                 res.json(),

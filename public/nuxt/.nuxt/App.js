@@ -92,6 +92,10 @@ export default {
     isFetching () {
       return this.nbFetching > 0
     },
+
+    isPreview () {
+      return Boolean(this.$options.previewData)
+    },
   },
 
   methods: {
@@ -176,10 +180,6 @@ export default {
     },
 
     setLayout (layout) {
-      if(layout && typeof layout !== 'string') {
-        throw new Error('[nuxt] Avoid using non-string value as layout property.')
-      }
-
       if (!layout || !layouts['_' + layout]) {
         layout = 'default'
       }
