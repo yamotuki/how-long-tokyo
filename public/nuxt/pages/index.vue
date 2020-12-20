@@ -48,12 +48,14 @@
     },
     methods: {
       getStyle: function(lat, lon) {
+        const bottomEnd = 35.547;
+        const leftEnd = 139.562459;
         return {
           // map 右上 35.789124, 139.964959
           // map 左下 35.561099, 139.552459
           position: 'absolute',
-          bottom: (lat - 35.561099) / (35.789124 - 35.561099) * 100 + '%',
-          left: (lon - 139.552459) / (139.964959 - 139.552459) * 100 + '%',
+          bottom: (lat - bottomEnd) / (35.789124 - bottomEnd) * 100 + '%',
+          left: (lon - leftEnd) / (139.964959 - leftEnd) * 100 + '%',
         };
       },
       setStart: async function(stationName) {
