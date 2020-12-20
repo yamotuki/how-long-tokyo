@@ -1,5 +1,6 @@
 <template>
     <div>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
         <h1>駅をクリックすると他の駅までの時間が分かります</h1>
         <!-- TODO: drag scroll 動いていないのでとりあえず諦め-->
         <!-- TODO: SPだと小さすぎ & スクロールできない。まずは view port から-->
