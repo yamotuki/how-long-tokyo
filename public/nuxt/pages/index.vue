@@ -50,13 +50,24 @@
       getStyle: function(lat, lon) {
         const bottomEnd = 35.547;
         const leftEnd = 139.562459;
-        return {
+
+        const bottom = (lat - bottomEnd) / (35.789124 - bottomEnd) * 100;
+        const left = (lon - leftEnd) / (139.964959 - leftEnd) * 100;
+
+        let style = {
           // map 右上 35.789124, 139.964959
           // map 左下 35.561099, 139.552459
           position: 'absolute',
-          bottom: (lat - bottomEnd) / (35.789124 - bottomEnd) * 100 + '%',
-          left: (lon - leftEnd) / (139.964959 - leftEnd) * 100 + '%',
+          bottom: bottom + '%',
+          left: left + '%',
         };
+
+        if (bottom < 0 || 100 < bottom
+            || left < 0 || 100 < left) {
+          style['visibility'] = 'hidden';
+        }
+
+        return style;
       },
       setStart: async function(stationName) {
         this.$nuxt.$loading.start();
