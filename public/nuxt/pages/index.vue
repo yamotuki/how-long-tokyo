@@ -64,14 +64,20 @@
         this.$nuxt.$loading.finish()
       },
       fetchData: async function(stationName = '東京') {
-        // memo: 入力が正しければCORSヘッダ入れてresponse.sendしているが、errorの場合には入らないのでCORSエラーになる。あとで直しても良い
         const jsonRes = await fetch(
-//            'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
-            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
+            'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
+            //            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
             encodeURIComponent(stationName)).
             then(res =>
                 res.json(),
-            );
+            ).catch(() => {
+              if (process.client) {
+                this.$toasted.show('範囲外の駅です');
+              }
+            });
+        if (!jsonRes) {
+          return;
+        }
 
         // 直接 json parse できなかったので一度 string にしている
         this.stations = JSON.parse(JSON.stringify(jsonRes));

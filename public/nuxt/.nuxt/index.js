@@ -12,6 +12,7 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 
 /* Plugins */
 
+import nuxt_plugin_toast_5b0fb964 from 'nuxt_plugin_toast_5b0fb964' // Source: ./toast.js (mode: 'client')
 import nuxt_plugin_vuedragscroll_25318c4a from 'nuxt_plugin_vuedragscroll_25318c4a' // Source: ../plugins/vue-dragscroll.js (mode: 'client')
 
 // Component: <ClientOnly>
@@ -164,6 +165,10 @@ async function createApp(ssrContext, config = {}) {
     }
   }
   // Plugin execution
+
+  if (process.client && typeof nuxt_plugin_toast_5b0fb964 === 'function') {
+    await nuxt_plugin_toast_5b0fb964(app.context, inject)
+  }
 
   if (process.client && typeof nuxt_plugin_vuedragscroll_25318c4a === 'function') {
     await nuxt_plugin_vuedragscroll_25318c4a(app.context, inject)

@@ -30,7 +30,7 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
     const docRef = db.collection('coord').doc('point');
     const resData = await docRef.get();
     if (!resData.get(inputForStart)) {
-        throw new Error('開始駅の名前が正しくありません');
+        response.status(404).send('開始駅の名前が正しくありません');
     }
     const startCoord = resData.get(inputForStart).coord;
     console.log(startCoord);
