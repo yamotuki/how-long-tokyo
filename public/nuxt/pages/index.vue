@@ -1,8 +1,16 @@
 <template>
     <div>
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <h1>駅をクリックすると他の駅までの時間が分かります</h1>
-        <!-- TODO: drag scroll 動いていないのでとりあえず諦め-->
+        <h1>他の駅までの時間</h1>
+        <div class="search-form">
+            <label>
+                開始点を検索
+                <input type="text" v-model="searchString">
+            </label>
+            <div v-for="searchWord in matchedStrings">
+                <a href="javascript:void(0)" v-on:click="setStart(searchWord)">{{ searchWord }} を開始点にする</a>
+            </div>
+        </div>
         <!-- TODO: SPだと小さすぎ & スクロールできない。まずは view port から-->
         <div v-dragscroll class="map-wrapper">
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
@@ -44,7 +52,28 @@
     data() {
       return {
         stations: [],
+        searchString: ''
       };
+    },
+    computed: {
+      matchedStrings: function() {
+        if (!this.searchString) {
+          return ''
+        }
+
+        return Object.keys(this.stations).filter((station) => {
+          // TODO: 全角半角括弧のどちらも削除。（東京都） や （新宿線） などという表示
+          // TODO: 名前を変更したら、検索に使えるように original name も含める
+          /*          const trimmedArray = station.match(/(.*)([（(].*[）)])?/);
+                    const trimmedStationName = trimmedArray[0];
+
+                    return trimmedStationName.includes(this.searchString);*/
+          return station.includes(this.searchString);
+        });
+      },
+      canSearch: function() {
+        return this.matchedStrings.length === 1
+      }
     },
     methods: {
       getStyle: function(lat, lon) {
@@ -72,6 +101,8 @@
       setStart: async function(stationName) {
         this.$nuxt.$loading.start();
         await this.fetchData(stationName);
+        // 検索を初期化
+        this.searchString = '';
         this.$nuxt.$loading.finish()
       },
       fetchData: async function(stationName = '東京') {
