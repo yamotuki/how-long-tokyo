@@ -52,7 +52,7 @@
     head: {
       meta: [
         {charset: 'utf-8'},
-        {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+        {name: 'viewport', content: 'initial-scale=1'},
         {hid: 'title', content: '他の駅までの距離'},
         {hid: 'description', name: 'description', content: '都内の駅から、他の複数の駅に何分かかるか検索できます。'}
       ]
