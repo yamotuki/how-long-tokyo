@@ -1,0 +1,37 @@
+# see: https://github.com/marketplace/actions/github-action-for-firebase
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+
+# 本当は jobs で分割したほうがいいのかもしれないが、artifact 周りが面倒そうなので一気にやってしまう
+jobs:
+  build_n_deploy:
+    name: Build function
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      # firebase.jsonの方で行われていたので不要。hosting の方もそれを使っても良いかもしれない
+#      - name: Install functions Dependencies
+#        run: npm install
+#        working-directory: ./functions
+#      - name: ts to js
+#        run: npm run build
+#        working-directory: ./functions
+
+      - name: Install nuxt Dependencies
+        run: npm install
+        working-directory: ./public/nuxt
+      - name: build static page
+        run: npm run generate
+        working-directory: ./public/nuxt
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions,hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
