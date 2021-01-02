@@ -112,8 +112,8 @@
       },
       fetchData: async function(stationName = '東京') {
         const jsonRes = await fetch(
-            'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
-            //            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
+            // 'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
+            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
             encodeURIComponent(stationName)).
             then(res =>
                 res.json(),
