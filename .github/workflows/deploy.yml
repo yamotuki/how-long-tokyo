@@ -14,13 +14,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
 
-      # firebase.jsonの方で行われていたので不要。hosting の方もそれを使っても良いかもしれない
-#      - name: Install functions Dependencies
-#        run: npm install
-#        working-directory: ./functions
-#      - name: ts to js
-#        run: npm run build
-#        working-directory: ./functions
+      - name: Install functions Dependencies
+        run: npm install
+        working-directory: ./functions
+      - name: ts to js
+        run: npm run build
+        working-directory: ./functions
 
       - name: Install nuxt Dependencies
         run: npm install
