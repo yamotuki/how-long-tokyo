@@ -7,11 +7,9 @@
                 <input type="text" v-model="searchString">
             </label>
             <div v-for="searchWord in matchedStrings">
-                <!-- TODO: () の中のものを表示上フィルターするのを追加 -->
                 <a href="javascript:void(0)" v-on:click="setStart(searchWord)">{{ searchWord }} を開始点にする</a>
             </div>
         </div>
-        <!-- TODO: SPだと小さすぎ & スクロールできない。まずは view port から-->
         <div v-dragscroll class="map-wrapper">
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
