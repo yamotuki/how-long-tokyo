@@ -8,6 +8,7 @@
                 <input type="text" v-model="searchString">
             </label>
             <div v-for="searchWord in matchedStrings">
+                <!-- TODO: () の中のものを表示上フィルターするのを追加 -->
                 <a href="javascript:void(0)" v-on:click="setStart(searchWord)">{{ searchWord }} を開始点にする</a>
             </div>
         </div>
@@ -62,18 +63,17 @@
         }
 
         return Object.keys(this.stations).filter((station) => {
-          // TODO: 全角半角括弧のどちらも削除。（東京都） や （新宿線） などという表示
-          // TODO: 名前を変更したら、検索に使えるように original name も含める
-          /*          const trimmedArray = station.match(/(.*)([（(].*[）)])?/);
-                    const trimmedStationName = trimmedArray[0];
+          let checkStationName = station;
 
-                    return trimmedStationName.includes(this.searchString);*/
-          return station.includes(this.searchString);
+          // （東京都） などを排除して検索
+          const filteredArray = station.match(/(.*?)([（(].*[）)])/);
+          if (filteredArray) {
+            checkStationName = filteredArray[1];
+          }
+
+          return checkStationName.includes(this.searchString);
         });
       },
-      canSearch: function() {
-        return this.matchedStrings.length === 1
-      }
     },
     methods: {
       getStyle: function(lat, lon) {
