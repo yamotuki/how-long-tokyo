@@ -20,7 +20,7 @@
                  alt="地図">
             <template v-for="stationName in Object.keys(stations)">
                 <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
-                    <div class="pointer-label">
+                    <div :id="stationName" class="pointer-label">
                         <!-- 開始点 -->
                         <span class="start-point" v-if="stations[stationName].time === 0">
                             <i class="material-icons">location_on</i>
@@ -35,7 +35,8 @@
                             <span class="time" v-if="stations[stationName].time > 1">
                                 {{ stations[stationName].time }}
                             </span>
-                            <a class="set-to-start" href="javascript:void(0)" v-on:click="setStart(stationName)">開始点にする</a>
+                            <a class="set-to-start" href="javascript:void(0)"
+                               v-on:click="setStart(stationName)">開始点にする</a>
                         </div>
                     </div>
                 </div>
@@ -106,10 +107,29 @@
       },
       setStart: async function(stationName) {
         this.$nuxt.$loading.start();
+
         await this.fetchData(stationName);
+
         // 検索を初期化
         this.searchString = '';
+
+        this._scrollToStation(stationName);
+
         this.$nuxt.$loading.finish()
+      },
+      _scrollToStation: function(name) {
+        if (!process.client) {
+          return;
+        }
+
+        // id を日本語の駅名でつけているのでこれで取れる
+        const element = document.getElementById(name);
+        if (!element) {
+          return;
+        }
+
+        // TODO: hover して見れるリンクがすぐ消えるので、hover 領域増やしたい
+        element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'})
       },
       fetchData: async function(stationName = '東京') {
         const jsonRes = await fetch(
