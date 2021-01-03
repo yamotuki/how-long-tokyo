@@ -20,7 +20,7 @@
                  alt="地図">
             <template v-for="stationName in Object.keys(stations)">
                 <div :style="getStyle(stations[stationName].coord.lat, stations[stationName].coord.lon)">
-                    <div class="pointer-label" v-on:click="setStart(stationName)">
+                    <div class="pointer-label">
                         <!-- 開始点 -->
                         <span class="start-point" v-if="stations[stationName].time === 0">
                             <i class="material-icons">location_on</i>
@@ -35,6 +35,7 @@
                             <span class="time" v-if="stations[stationName].time > 1">
                                 {{ stations[stationName].time }}
                             </span>
+                            <a class="set-to-start" href="javascript:void(0)" v-on:click="setStart(stationName)">開始点にする</a>
                         </div>
                     </div>
                 </div>
@@ -144,9 +145,6 @@
         width: 1500px;
     }
 
-    .pointer-label {
-        font-size: 13px;
-    }
 
     .map-image {
         width: 100%;
@@ -166,20 +164,26 @@
         }
     }
 
+    .pointer-label {
+        font-size: 13px;
+        position: relative;
+    }
+
     .selectable-point {
-        .name {
+        .name, .set-to-start {
             display: none;
         }
 
         .time {
-            cursor: pointer;
             color: #595959;
         }
 
-        &:hover > .name, &:hover > .time {
+        &:hover > .name, &:hover > .time, &:hover > .set-to-start {
+            top: 35px;
+            position: relative;
             display: block;
             font-size: 18px;
-            color: blue;
+            color: orangered;
             background-color: white;
             opacity: 0.7;
             border-radius: 30%;
