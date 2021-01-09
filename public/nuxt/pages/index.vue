@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>他の駅までの時間（単位: 分）</h1>
+        <h1 class="title">他の駅までの時間（単位: 分）</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -159,11 +159,19 @@
 </script>
 
 <style lang="scss">
+    .title {
+        position: fixed;
+        z-index: 1;
+        background-color: white;
+        font-size: 14px;
+        top: 5px;
+        left: 20px;
+    }
     .search-form {
         position: fixed;
         top: 35px;
-        right: 20px;
-        z-index: 2;
+        left: 20px;
+        z-index: 1;
         background-color: white;
         /* sp でスクロールイベント終わるまでの間もfixed が聞くようにするハックらしい */
         transform: translate3d(0, 0, 0);
