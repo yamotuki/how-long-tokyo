@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>他の駅までの時間</h1>
+        <h1>他の駅までの時間（単位: 分）</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -10,7 +10,7 @@
                 <a href="javascript:void(0)" v-on:click="setStart(searchWord)">{{ searchWord }} を開始点にする</a>
             </div>
         </div>
-        <div v-dragscroll class="map-wrapper">
+        <div class="map-wrapper">
             <!-- TODO: 不要なアイコンを読み込まないようにする -->
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
                   rel="stylesheet">
@@ -159,6 +159,16 @@
 </script>
 
 <style lang="scss">
+    .search-form {
+        position: fixed;
+        top: 35px;
+        right: 20px;
+        z-index: 2;
+        background-color: white;
+        /* sp でスクロールイベント終わるまでの間もfixed が聞くようにするハックらしい */
+        transform: translate3d(0, 0, 0);
+    }
+
     .map-wrapper {
         position: relative;
         overflow: hidden;

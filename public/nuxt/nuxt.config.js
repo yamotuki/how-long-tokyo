@@ -1,6 +1,5 @@
 module.exports = {
   plugins: [
-    {src: '@/plugins/vue-dragscroll.js', ssr: false}
   ],
   modules: [
     '@nuxtjs/toast',
