@@ -31,10 +31,9 @@ export const showReachableTrigger = functions.region('asia-northeast1').https.on
     const resData = await docRef.get();
     if (!resData.get(inputForStart)) {
         response.status(404).send('開始駅の名前が正しくありません');
+        return
     }
     const startCoord = resData.get(inputForStart).coord;
-    console.log(startCoord);
-    // const startNodeId = resData.get(inputForStart).id;
 
     // すでに取得したことがあれば firestore から取得
     const timeToArriveDoc = db.collection('timeToArrive').doc(inputForStart);

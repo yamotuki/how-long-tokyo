@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="title">他の駅までの時間（単位: 分） ※大体です。時速4km/hで歩いた場合。</h1>
+        <h1 class="title">他の駅までの時間  ※大体です。時速4km/hで歩いた場合。</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -128,7 +128,6 @@
           return;
         }
 
-        // TODO: hover して見れるリンクがすぐ消えるので、hover 領域増やしたい
         element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'})
       },
       fetchData: async function(stationName = '東京') {
@@ -141,7 +140,9 @@
             res.json(),
         ).catch(() => {
           if (process.client) {
-            this.$toasted.show('範囲外の駅です');
+            /* マップ範囲外かcoordの起点となった落合が対象。*/
+            /* TODO: 落合についてはあとで治す。 */
+            this.$toasted.show('サポート対象外の駅です', {duration: 5000});
           }
         });
         if (!jsonRes) {
