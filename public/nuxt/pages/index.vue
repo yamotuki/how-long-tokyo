@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="title">他の駅までの時間（単位: 分）</h1>
+        <h1 class="title">他の駅までの時間（単位: 分） ※大体です。時速4km/hで歩いた場合。</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -132,7 +132,6 @@
         element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'})
       },
       fetchData: async function(stationName = '東京') {
-        console.log(process.env.NODE_ENV);
         const url = process.env.NODE_ENV === 'development'
             ? 'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start='
             : 'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=';
