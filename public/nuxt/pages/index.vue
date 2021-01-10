@@ -132,17 +132,19 @@
         element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'})
       },
       fetchData: async function(stationName = '東京') {
+        console.log(process.env.NODE_ENV);
+        const url = process.env.NODE_ENV === 'development'
+            ? 'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start='
+            : 'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=';
         const jsonRes = await fetch(
-            // 'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start=' +
-            'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=' +
-            encodeURIComponent(stationName)).
-            then(res =>
-                res.json(),
-            ).catch(() => {
-              if (process.client) {
-                this.$toasted.show('範囲外の駅です');
-              }
-            });
+            url + encodeURIComponent(stationName)
+        ).then(res =>
+            res.json(),
+        ).catch(() => {
+          if (process.client) {
+            this.$toasted.show('範囲外の駅です');
+          }
+        });
         if (!jsonRes) {
           return;
         }
@@ -167,6 +169,7 @@
         top: 5px;
         left: 20px;
     }
+
     .search-form {
         position: fixed;
         top: 35px;
