@@ -165,7 +165,7 @@
       }
     },
     async fetch() {
-      await this.setStart('東京')
+      await this.fetchData('東京')
     },
   };
 </script>
