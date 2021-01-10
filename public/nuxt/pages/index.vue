@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="title">他の駅までの時間  ※大体です。時速4km/hで歩いた場合。</h1>
+        <h1 class="title">”おおよそ”の他の駅までの時間（分）</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -33,10 +33,13 @@
                                 {{ stationName }}
                              </span>
                             <span class="time" v-if="stations[stationName].time > 1">
-                                {{ stations[stationName].time }}分
+                                {{ stations[stationName].time }}
                             </span>
                             <a class="set-to-start" href="javascript:void(0)"
                                v-on:click="setStart(stationName)">開始点にする</a>
+                            <a class="search-detail" href="javascript:void(0)" v-on:click="navitimeSearchUrl(stationName)">詳細検索
+                                <i class="material-icons">open_in_new</i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +63,8 @@
     data() {
       return {
         stations: [],
-        searchString: ''
+        searchString: '',
+        currentStartPoint: ''
       };
     },
     computed: {
@@ -80,9 +84,14 @@
 
           return checkStationName.includes(this.searchString);
         });
-      },
+      }
     },
     methods: {
+      navitimeSearchUrl: function(destStationName) {
+        const link = "https://www.navitime.co.jp/transfer/searchlist?orvStationName=" + this.currentStartPoint + "&dnvStationName=" + destStationName + "&month=2021%2F01&day=12&hour=8&minute=0&wspeed=125"
+
+        window.open(link);
+      },
       getStyle: function(lat, lon) {
         const bottomEnd = 35.547;
         const leftEnd = 139.562459;
@@ -115,6 +124,7 @@
 
         this._scrollToStation(stationName);
 
+        this.currentStartPoint = stationName;
         this.$nuxt.$loading.finish()
       },
       _scrollToStation: function(name) {
@@ -130,7 +140,7 @@
 
         element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'})
       },
-      fetchData: async function(stationName = '東京') {
+      fetchData: async function(stationName) {
         const url = process.env.NODE_ENV === 'development'
             ? 'http://localhost:5001/how-long-tokyo/asia-northeast1/showReachableTrigger?start='
             : 'https://asia-northeast1-how-long-tokyo.cloudfunctions.net/showReachableTrigger?start=';
@@ -155,7 +165,7 @@
       }
     },
     async fetch() {
-      await this.fetchData()
+      await this.setStart('東京')
     },
   };
 </script>
@@ -211,7 +221,7 @@
     }
 
     .selectable-point {
-        .name, .set-to-start {
+        .name, .set-to-start, .search-detail {
             display: none;
         }
 
@@ -220,7 +230,7 @@
         }
 
         @media screen and (min-width:480px) {
-            &:hover > .name, &:hover > .time, &:hover > .set-to-start {
+            &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
                 top: 35px;
                 position: relative;
                 display: block;
@@ -232,7 +242,7 @@
         }
         // sp だと hover できないのでクリックしたら出るようにする
         @media screen and (max-width:479px) {
-            &:active > .name, &:active > .time, &:active > .set-to-start {
+            &:active > .name, &:active > .time, &:active > .set-to-start, &:active > .search-detail {
                 top: 35px;
                 position: relative;
                 display: block;
