@@ -33,7 +33,7 @@
                                 {{ stationName }}
                              </span>
                             <span class="time" v-if="stations[stationName].time > 1">
-                                {{ stations[stationName].time }}
+                                {{ stations[stationName].time }}分
                             </span>
                             <a class="set-to-start" href="javascript:void(0)"
                                v-on:click="setStart(stationName)">開始点にする</a>
@@ -224,7 +224,6 @@
             color: orangered;
             background-color: white;
             opacity: 0.7;
-            border-radius: 30%;
         }
     }
 </style>
