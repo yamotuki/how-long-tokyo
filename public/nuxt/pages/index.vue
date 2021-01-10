@@ -52,7 +52,7 @@
     head: {
       meta: [
         {charset: 'utf-8'},
-        {name: 'viewport', content: 'initial-scale=1'},
+        {name: 'viewport', content: 'initial-scale=1, user-scalable=no'},
         {hid: 'title', content: '他の駅までの距離'},
         {hid: 'description', name: 'description', content: '都内の駅から、他の複数の駅に何分かかるか検索できます。'}
       ]
@@ -219,14 +219,28 @@
             color: #595959;
         }
 
-        &:hover > .name, &:hover > .time, &:hover > .set-to-start {
-            top: 35px;
-            position: relative;
-            display: block;
-            font-size: 18px;
-            color: orangered;
-            background-color: white;
-            opacity: 0.7;
+        @media screen and (min-width:480px) {
+            &:hover > .name, &:hover > .time, &:hover > .set-to-start {
+                top: 35px;
+                position: relative;
+                display: block;
+                font-size: 18px;
+                color: orangered;
+                background-color: white;
+                opacity: 0.7;
+            }
+        }
+        // sp だと hover できないのでクリックしたら出るようにする
+        @media screen and (max-width:479px) {
+            &:active > .name, &:active > .time, &:active > .set-to-start {
+                top: 35px;
+                position: relative;
+                display: block;
+                font-size: 18px;
+                color: orangered;
+                background-color: white;
+                opacity: 0.7;
+            }
         }
     }
 </style>
