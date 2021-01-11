@@ -231,11 +231,13 @@
 
         .time {
             color: #595959;
+            // クリック領域を広げるため
+            padding: 2px;
         }
 
         @media screen and (min-width: 480px) {
             &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
-                top: 35px;
+                top: 65px;
                 position: relative;
                 display: block;
                 font-size: 18px;
@@ -246,8 +248,13 @@
         }
         // sp だと hover できないのでクリックしたら出るようにする
         @media screen and (max-width: 479px) {
+            .time {
+                font-size: 15px;
+                font-weight: bold;
+            }
+
             &:active > .name, &:active > .time, &:active > .set-to-start, &:active > .search-detail {
-                top: 35px;
+                top: 65px;
                 position: relative;
                 display: block;
                 font-size: 18px;
