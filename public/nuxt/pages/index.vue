@@ -32,7 +32,8 @@
                             <span class="name">
                                 {{ stationName }}
                              </span>
-                            <span class="time" v-if="stations[stationName].time > 1">
+                            <span v-on:mousedown="" v-on:touchstart="" class="time"
+                                  v-if="stations[stationName].time > 1">
                                 {{ stations[stationName].time }}
                             </span>
                             <a class="set-to-start" href="javascript:void(0)"
@@ -232,36 +233,24 @@
         .time {
             color: #595959;
             // クリック領域を広げるため
-            padding: 2px;
+            // padding: 1px;
         }
 
-        @media screen and (min-width: 480px) {
-            &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
-                top: 65px;
-                position: relative;
-                display: block;
-                font-size: 18px;
-                color: orangered;
-                background-color: white;
-                opacity: 0.7;
-            }
-        }
-        // sp だと hover できないのでクリックしたら出るようにする
-        @media screen and (max-width: 479px) {
+        @media screen and (max-width: 480px) {
             .time {
                 font-size: 15px;
                 font-weight: bold;
             }
+        }
 
-            &:active > .name, &:active > .time, &:active > .set-to-start, &:active > .search-detail {
-                top: 65px;
-                position: relative;
-                display: block;
-                font-size: 18px;
-                color: orangered;
-                background-color: white;
-                opacity: 0.7;
-            }
+        &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
+            top: 65px;
+            position: relative;
+            display: block;
+            font-size: 18px;
+            color: orangered;
+            background-color: white;
+            opacity: 0.7;
         }
     }
 </style>
