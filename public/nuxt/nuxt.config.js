@@ -1,5 +1,5 @@
 module.exports = {
-  ssr: false,
+  // ssr: false,
   plugins: [
   ],
   modules: [
