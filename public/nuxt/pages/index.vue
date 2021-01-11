@@ -37,7 +37,8 @@
                             </span>
                             <a class="set-to-start" href="javascript:void(0)"
                                v-on:click="setStart(stationName)">開始点にする</a>
-                            <a class="search-detail" href="javascript:void(0)" v-on:click="navitimeSearchUrl(stationName)">詳細検索
+                            <a class="search-detail" href="javascript:void(0)"
+                               v-on:click="navitimeSearchUrl(stationName)">詳細検索
                                 <i class="material-icons">open_in_new</i>
                             </a>
                         </div>
@@ -88,7 +89,8 @@
     },
     methods: {
       navitimeSearchUrl: function(destStationName) {
-        const link = "https://www.navitime.co.jp/transfer/searchlist?orvStationName=" + this.currentStartPoint + "&dnvStationName=" + destStationName + "&month=2021%2F01&day=12&hour=8&minute=0&wspeed=125"
+        const link = "https://www.navitime.co.jp/transfer/searchlist?orvStationName=" + this.currentStartPoint +
+            "&dnvStationName=" + destStationName + "&month=2021%2F01&day=12&hour=8&minute=0&wspeed=125"
 
         window.open(link);
       },
@@ -165,7 +167,9 @@
       }
     },
     async fetch() {
-      await this.fetchData('東京')
+      const initial = '東京';
+      await this.fetchData(initial);
+      this.currentStartPoint = initial;
     },
   };
 </script>
@@ -229,7 +233,7 @@
             color: #595959;
         }
 
-        @media screen and (min-width:480px) {
+        @media screen and (min-width: 480px) {
             &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
                 top: 35px;
                 position: relative;
@@ -241,7 +245,7 @@
             }
         }
         // sp だと hover できないのでクリックしたら出るようにする
-        @media screen and (max-width:479px) {
+        @media screen and (max-width: 479px) {
             &:active > .name, &:active > .time, &:active > .set-to-start, &:active > .search-detail {
                 top: 35px;
                 position: relative;
