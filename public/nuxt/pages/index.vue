@@ -268,10 +268,6 @@
             }
         }
 
-        .time {
-            color: #595959;
-        }
-
         @media screen and (max-width: 480px) {
             .time {
                 font-size: 15px;
@@ -285,9 +281,16 @@
             position: relative;
             display: block;
             font-size: 18px;
-            color: orangered;
             background-color: white;
             opacity: 0.7;
+        }
+
+        .time {
+            color: #595959;
+        }
+
+        &:hover > .time {
+            color: black;
         }
     }
 </style>
