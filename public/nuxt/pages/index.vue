@@ -28,8 +28,9 @@
                                 {{ stationName }}
                             </span>
                         </span>
-                        <div class="selectable-point">
-                            <span class="name">
+                        <div class="selectable-point" v-if="stations[stationName].time !== 0">
+                            <span class="name" :class="{ show: shouldShow(stationName) }">
+                                <i class="material-icons">location_on</i>
                                 {{ stationName }}
                              </span>
                             <span v-on:mousedown="" v-on:touchstart="" class="time"
@@ -89,6 +90,11 @@
       }
     },
     methods: {
+      shouldShow: function(stationName) {
+        // https://rtrp.jp/locations/229/categories/2159/
+        return ['東京', '池袋', '品川', '新宿', '渋谷', '上野', '新橋', '大手町', '北千住', '銀座', '高田馬場', '飯田橋', '秋葉原'].includes(
+            stationName);
+      },
       navitimeSearchUrl: function(destStationName) {
         const link = "https://www.navitime.co.jp/transfer/searchlist?orvStationName=" + this.currentStartPoint +
             "&dnvStationName=" + destStationName + "&month=2021%2F01&day=12&hour=8&minute=0&wspeed=125"
@@ -226,14 +232,21 @@
     }
 
     .selectable-point {
-        .name, .set-to-start, .search-detail {
+        .set-to-start, .search-detail {
             display: none;
+        }
+
+        .name {
+            display: none;
+
+            &.show {
+                display: block;
+                color: black;
+            }
         }
 
         .time {
             color: #595959;
-            // クリック領域を広げるため
-            // padding: 1px;
         }
 
         @media screen and (max-width: 480px) {
