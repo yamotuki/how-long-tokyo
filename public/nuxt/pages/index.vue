@@ -242,6 +242,16 @@
             &.show {
                 display: block;
                 color: black;
+                font-size: 14px;
+
+                @media screen and (max-width: 480px) {
+                    font-size: 20px;
+                }
+
+                .material-icons {
+                    vertical-align: bottom;
+                    margin-right: -7px;
+                }
             }
         }
 
