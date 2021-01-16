@@ -257,6 +257,7 @@
         }
 
         &:hover > .name, &:hover > .time, &:hover > .set-to-start, &:hover > .search-detail {
+            z-index: 1;
             top: 65px;
             position: relative;
             display: block;
