@@ -92,7 +92,7 @@
     methods: {
       shouldShow: function(stationName) {
         // https://rtrp.jp/locations/229/categories/2159/
-        return ['東京', '池袋', '品川', '新宿', '渋谷', '上野', '新橋', '大手町', '北千住', '銀座', '高田馬場', '飯田橋', '秋葉原'].includes(
+        return ['東京', '池袋', '品川', '新宿', '渋谷', '上野', '北千住', '高田馬場', '飯田橋', '秋葉原', '王子'].includes(
             stationName);
       },
       navitimeSearchUrl: function(destStationName) {
