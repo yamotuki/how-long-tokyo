@@ -224,6 +224,10 @@
     }
 
     .start-point {
+        @include text-shadow();
+        position: relative;
+        z-index: 1;
+
         color: red;
 
         .material-icons {
