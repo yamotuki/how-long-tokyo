@@ -182,6 +182,17 @@
 </script>
 
 <style lang="scss">
+    @mixin text-shadow() {
+        text-shadow: 2px 2px 1px white,
+        -2px 2px 1px white,
+        2px -2px 1px white,
+        -2px -2px 1px white,
+        2px 0px 1px white,
+        0px 2px 1px white,
+        -2px 0px 1px white,
+        0px -2px 1px white;
+    }
+
     .title {
         position: fixed;
         z-index: 1;
@@ -243,6 +254,7 @@
                 display: block;
                 color: black;
                 font-size: 14px;
+                @include text-shadow();
 
                 @media screen and (max-width: 480px) {
                     font-size: 20px;
