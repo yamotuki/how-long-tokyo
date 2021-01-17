@@ -14,5 +14,11 @@ module.exports = {
   },
   build: {
     loadingScreen: false
+  },
+  buildModules: [
+    '@nuxtjs/google-analytics'
+  ],
+  googleAnalytics: {
+    id: 'G-W07ECYL3S3'
   }
 };
