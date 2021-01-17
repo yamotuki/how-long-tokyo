@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="title">”おおよそ”の他の駅までの時間（分）</h1>
+        <h1 class="title">”おおよそ”の他の駅までの時間（分）。条件により誤差があります。</h1>
         <div class="search-form">
             <label>
                 開始点を検索
@@ -34,8 +34,9 @@
                                 {{ stationName }}
                              </span>
                             <span v-on:mousedown="" v-on:touchstart="" class="time"
-                                  v-if="stations[stationName].time > 1">
-                                {{ stations[stationName].time }}
+                                  v-if="stations[stationName].time - 2 > 1">
+                                <!-- 開始点をcoordで検索しているので最初の徒歩の分が入っている模様。少し引くと大体navitime詳細検索と一致する。 -->
+                                {{ stations[stationName].time - 2 }}
                             </span>
                             <a class="set-to-start" href="javascript:void(0)"
                                v-on:click="setStart(stationName)">開始点にする</a>
